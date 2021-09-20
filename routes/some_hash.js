@@ -15,6 +15,7 @@ const existingURLs = [
     }
 ];
 
+// get the url of using the hash
 const getUrl = (hash) =>{
     for (let urls of existingURLs){
         if (hash === urls.hash){

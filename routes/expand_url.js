@@ -16,7 +16,7 @@ const existingURLs = [
 
 // checking the hash
 const checkHash = (hash) => {
-    let orginalUrl = ""
+    let originalUrl = null;
     for (let url of existingURLs){
         if (hash == url.hash){
             originalUrl = url.url;
@@ -42,12 +42,15 @@ const deleteUrl = (hash) => {
 router.get('/:hash', async (req, res) => {
     try{
         const url = await checkHash(req.params.hash);
+        if (!url){
+            const hash = req.params.hash;
+            const message = `The is no longer URL registered for hash value '${hash}'`
+            return res.status(404).json(message);
+        }
         res.status(200).json(url);
     }catch(err){
-        const hash = req.params.hash;
-        const message = `The is no longer URL registered for hash value '${hash}'`
-        console.log(err);
-        res.status(404).json(message);
+        console.log(err)
+        res.status(404).json(err);
     }
     
 });
@@ -55,13 +58,16 @@ router.get('/:hash', async (req, res) => {
 router.delete('/:hash', async (req, res) =>{
     try{
         const url = await checkHash(req.params.hash);
+        if (!url){
+            const hash = req.params.hash;
+            const message = `The is no longer URL registered for hash value '${hash}'`
+            return res.status(404).json(message);
+        }
         const result = deleteUrl(req.params.hash);
         res.status(200).json(result);
     }catch(err){
-        const hash = req.params.hash;
-        const message = `The is no longer URL registered for hash value '${hash}'`
         console.log(err);
-        res.status(404).json(message);
+        res.status(404).json(err);
     }
 });
 
